@@ -1,0 +1,34 @@
+[
+    {
+        "crime_id": "183653763",
+        "original_crime_type_name": "Traffic Stop",
+        "report_date": "2018-12-31T00:00:00.000",
+        "call_date": "2018-12-31T00:00:00.000",
+        "offense_date": "2018-12-31T00:00:00.000",
+        "call_time": "23:57",
+        "call_date_time": "2018-12-31T23:57:00.000",
+        "disposition": "ADM",
+        "address": "Geary Bl/divisadero St",
+        "city": "San Francisco",
+        "state": "CA",
+        "agency_id": "1",
+        "address_type": "Intersection",
+        "common_location": ""
+    },
+    {
+        "crime_id": "183653756",
+        "original_crime_type_name": "Traf Violation Cite",
+        "report_date": "2018-12-31T00:00:00.000",
+        "call_date": "2018-12-31T00:00:00.000",
+        "offense_date": "2018-12-31T00:00:00.000",
+        "call_time": "23:54",
+        "call_date_time": "2018-12-31T23:54:00.000",
+        "disposition": "CIT",
+        "address": "100 Blk Howard St",
+        "city": "San Francisco",
+        "state": "CA",
+        "agency_id": "1",
+        "address_type": "Geo-Override",
+        "common_location": ""
+    }
+]
