@@ -75,5 +75,42 @@ root
  |-- common_location: string (nullable = true)
 ```
 ## Consumer
+### data_stream.py
+To start structured streaming, execute command:
+```
+python data_stream.py
+```
+***Implementation***
+To make starting program easier I've added following lines. It allows to run code with simple command python data_stream.py.
+```
+import os
+os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.4 pyspark-shell'
+```
+After reading stream from kafka topic, I'm pulling value (which is json object produced by kafka_server.py) and timestamp (I find it most convenient real time date).
+```
+kafka_df = df.selectExpr("CAST(value AS STRING)", "CAST(timestamp AS timestamp)")
+```
+For aggregation I'm using watermark and time window as it can be seen below.
+```
+agg_df = distinct_table.select('call_date_time', 'original_crime_type_name', 'disposition') \
+    .withWatermark('call_date_time', '1 day') \
+    .groupBy(
+             psf.window('call_date_time', "5 minutes", "2 minutes"),
+             'original_crime_type_name', 
+             'disposition') \
+    .count()
+```
+The results can be seen on the screen below:
 
 ![alt text](https://github.com/mathew-i/SFCrimeStatisticsSparkStreaming/blob/master/img/screen1d.PNG)
+In the join, there are few possibilities, because it's a join of stream with static data frame.
+There are two possibilities to join these data sets and it's inner join and left outer join. I was playing with those two types of joines and it can be easily changed by typing inner instead of left_outer.
+```
+join_query = agg_df.join(radio_code_df, radio_code_df.disposition==agg_df.disposition, "left_outer")
+```
+The result of the join can be seen on the screen below.
+![alt text](https://github.com/mathew-i/SFCrimeStatisticsSparkStreaming/blob/master/img/screen2d.PNG)
+
+### consumer_server.py
+One of the project goals was to write plain vanilla kafka consumer. The result can be seen below.
+![alt text](https://github.com/mathew-i/SFCrimeStatisticsSparkStreaming/blob/master/img/screen4.PNG)
