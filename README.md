@@ -96,7 +96,7 @@ For aggregation I'm using watermark and time window as it can be seen below.
 agg_df = distinct_table.select('call_date_time', 'original_crime_type_name', 'disposition') \
     .withWatermark('call_date_time', '1 day') \
     .groupBy(
-             psf.window('call_date_time', "5 minutes", "2 minutes"),
+             psf.window('call_date_time', "10 minutes", "5 minutes"),
              'original_crime_type_name', 
              'disposition') \
     .count()
@@ -115,3 +115,8 @@ The result of the join can be seen on the screen below.
 ### consumer_server.py
 One of the project goals was to write plain vanilla kafka consumer. The result can be seen below.
 ![alt text](https://github.com/mathew-i/SFCrimeStatisticsSparkStreaming/blob/master/img/screen4.PNG)
+
+***Optimisation***
+Optimising throughput means optimising processedRowsPerSecond KPI (the higher the better). It can be achived by setting kafka cluster with more brokers (more even load distribution) and during the topic definition (number of partitions) and by tinkering with few params:
+[spark.default.parallelism](https://spark.apache.org/docs/latest/tuning.html#level-of-parallelism) is a parameter defining level of parallelism. It is adviced to have no more than 3 tasks per core.
+*spark.streaming.kafka.maxRatePerPartition* is the maximum number messages processed per micro batch per partition.
