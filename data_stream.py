@@ -5,8 +5,8 @@ from pyspark.sql.types import *
 import pyspark.sql.functions as psf
 
 # small improvement, easier to run program, just type command "python data_stream.py"
-import os
-os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.4 pyspark-shell'
+#import os
+#os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.4 pyspark-shell'
 
 schema = StructType([
     StructField("crime_id", StringType(), True),
@@ -33,7 +33,7 @@ def run_spark_job(spark):
         .option("kafka.bootstrap.servers", "localhost:9092") \
         .option("subscribe", "com.udacity.police.calls.new") \
         .option("startingOffset", "earliest") \
-        .option("maxRatePerPartition", 100) \
+        .option("maxRatePerPartition", 10000) \
         .option("maxOffsetPerTrigger", 200) \
         .load()
 
@@ -51,7 +51,7 @@ def run_spark_job(spark):
     #.dropDuplicates()
 
     agg_df = distinct_table.select('call_date_time2', 'original_crime_type_name', 'disposition') \
-    .withWatermark('call_date_time2', '1 day') \
+    .withWatermark('call_date_time2', '10 minutes') \
     .groupBy(
              psf.window('call_date_time2', "5 minutes", "2 minutes"),
              #'call_date_time2',
