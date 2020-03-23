@@ -81,6 +81,7 @@ To start structured streaming, execute command:
 python data_stream.py
 ```
 ***Implementation***
+
 To make starting program easier I've added following lines. It allows to run code with simple command python data_stream.py.
 ```
 import os
