@@ -118,5 +118,7 @@ One of the project goals was to write plain vanilla kafka consumer. The result c
 
 ***Optimisation***
 Optimising throughput means optimising processedRowsPerSecond KPI (the higher the better). It can be achived by setting kafka cluster with more brokers (more even load distribution) and during the topic definition (number of partitions) and by tinkering with few params:
+
 [spark.default.parallelism](https://spark.apache.org/docs/latest/tuning.html#level-of-parallelism) is a parameter defining level of parallelism. It is adviced to have no more than 3 tasks per core.
+
 *spark.streaming.kafka.maxRatePerPartition* is the maximum number messages processed per micro batch per partition.
